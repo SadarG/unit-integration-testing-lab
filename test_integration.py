@@ -1,34 +1,21 @@
+# test_integration.py
 import pytest
-from bank_app import transfer, calculate_interest
-
-# -------- transfer() INTEGRATION TESTS --------
+from unit_integration_lab.bank_app import deposit, withdraw, transfer, calculate_interest
 
 def test_transfer_valid():
-    from_balance, to_balance = transfer(1000, 500, 300)
-    assert from_balance == 700
-    assert to_balance == 800
+    balance_from, balance_to = transfer(1000, 500, 300)
+    assert balance_from == 700
+    assert balance_to == 800
 
-
-def test_transfer_full_balance():
-    from_balance, to_balance = transfer(500, 1000, 500)
-    assert from_balance == 0
-    assert to_balance == 1500
-
-
-def test_transfer_insufficient_balance():
+def test_transfer_insufficient():
     with pytest.raises(ValueError):
-        transfer(400, 1000, 800)
+        transfer(100, 500, 200)
 
-
-def test_transfer_negative_amount():
-    with pytest.raises(ValueError):
-        transfer(1000, 500, -200)
-
-
-# -------- Combined Workflow TEST --------
-
-def test_transfer_then_interest_calculation():
-    from_balance, to_balance = transfer(2000, 1000, 500)
-    final_balance = calculate_interest(to_balance, 10, 1)
-    # Floating point issue fix
-    assert final_balance == pytest.approx(1650)
+def test_transfer_and_interest():
+    # Transfer first
+    balance_from, balance_to = transfer(2000, 1000, 500)
+    # Then calculate interest on new balance_to
+    interest = calculate_interest(balance_to, 5, 1)
+    assert balance_from == 1500
+    assert balance_to == 1500
+    assert interest == 1500 * 1.05

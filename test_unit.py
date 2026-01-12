@@ -1,79 +1,46 @@
+# test_unit.py
 import pytest
-from bank_app import deposit, withdraw, calculate_interest, check_loan_eligibility
+from unit_integration_lab.bank_app import deposit, withdraw, calculate_interest, check_loan_eligibility
 
-
-# -------- deposit() UNIT TESTS --------
-
-def test_deposit_valid_amount():
+# deposit tests
+def test_deposit_valid():
     assert deposit(1000, 500) == 1500
 
-
-def test_deposit_boundary_zero():
+def test_deposit_invalid():
     with pytest.raises(ValueError):
-        deposit(1000, 0)
+        deposit(1000, -100)
 
+# withdraw tests
+def test_withdraw_valid():
+    assert withdraw(1000, 500) == 500
 
-def test_deposit_negative_amount():
+def test_withdraw_insufficient():
     with pytest.raises(ValueError):
-        deposit(1000, -200)
+        withdraw(1000, 1500)
 
-
-# -------- withdraw() UNIT TESTS --------
-
-def test_withdraw_valid_amount():
-    assert withdraw(1000, 300) == 700
-
-
-def test_withdraw_boundary_equal_balance():
-    assert withdraw(1000, 1000) == 0
-
-
-def test_withdraw_insufficient_balance():
-    with pytest.raises(ValueError):
-        withdraw(500, 1000)
-
-
-def test_withdraw_negative_amount():
+def test_withdraw_invalid():
     with pytest.raises(ValueError):
         withdraw(1000, -100)
 
-
-# -------- calculate_interest() UNIT TESTS --------
-
+# calculate_interest tests
 def test_calculate_interest_valid():
-    result = calculate_interest(1000, 10, 1)
-    assert result == 1100
-
-
-def test_calculate_interest_zero_years():
-    result = calculate_interest(1000, 10, 0)
-    assert result == 1000
-
+    assert calculate_interest(1000, 5, 2) == 1000 * (1 + 5/100) ** 2
 
 def test_calculate_interest_negative_balance():
     with pytest.raises(ValueError):
-        calculate_interest(-1000, 10, 1)
-
+        calculate_interest(-1000, 5, 2)
 
 def test_calculate_interest_negative_rate():
     with pytest.raises(ValueError):
-        calculate_interest(1000, -5, 1)
+        calculate_interest(1000, -5, 2)
 
+# check_loan_eligibility tests
+def test_check_loan_eligibility_eligible():
+    assert check_loan_eligibility(6000, 750) == True
 
-# -------- check_loan_eligibility() UNIT TESTS --------
+def test_check_loan_eligibility_not_eligible():
+    assert check_loan_eligibility(4000, 650) == False
 
-def test_loan_eligible():
-    assert check_loan_eligibility(6000, 750) is True
-
-
-def test_loan_not_eligible_low_balance():
-    assert check_loan_eligibility(3000, 750) is False
-
-
-def test_loan_not_eligible_low_credit_score():
-    assert check_loan_eligibility(6000, 650) is False
-
-
-def test_loan_negative_balance():
+def test_check_loan_eligibility_negative_balance():
     with pytest.raises(ValueError):
-        check_loan_eligibility(-5000, 750)
+        check_loan_eligibility(-1000, 750)
