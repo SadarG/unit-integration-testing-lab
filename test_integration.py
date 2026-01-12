@@ -1,6 +1,6 @@
 # test_integration.py
 import pytest
-from unit_integration_lab.bank_app import deposit, withdraw, transfer, calculate_interest
+from bank_app import deposit, withdraw, transfer, calculate_interest
 
 def test_transfer_valid():
     balance_from, balance_to = transfer(1000, 500, 300)

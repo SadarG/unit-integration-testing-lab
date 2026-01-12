@@ -1,6 +1,6 @@
 # test_unit.py
 import pytest
-from unit_integration_lab.bank_app import deposit, withdraw, calculate_interest, check_loan_eligibility
+from bank_app import deposit, withdraw, calculate_interest, check_loan_eligibility
 
 # deposit tests
 def test_deposit_valid():
