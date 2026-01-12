@@ -1,2 +1,4 @@
 pytest
 pytest-html
+pytest>=7.0
+pytest-html>=4.0
