@@ -1,7 +1,6 @@
 import pytest
 from bank_app import transfer, calculate_interest
 
-
 # -------- transfer() INTEGRATION TESTS --------
 
 def test_transfer_valid():
@@ -31,4 +30,5 @@ def test_transfer_negative_amount():
 def test_transfer_then_interest_calculation():
     from_balance, to_balance = transfer(2000, 1000, 500)
     final_balance = calculate_interest(to_balance, 10, 1)
-    assert final_balance == 1650
+    # Floating point issue fix
+    assert final_balance == pytest.approx(1650)
